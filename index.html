@@ -1,43 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dummy Form</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Submission Form</title>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#1e293b;
+      --card:#0b1224cc;
+      --accent:#22c55e;
+      --accent-2:#2dd4bf;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --danger:#ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(34,197,94,.12), transparent),
+                  radial-gradient(1000px 500px at 90% 20%, rgba(45,212,191,.12), transparent),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:grid; place-items:center; padding:24px;
+    }
+
+    .card{
+      width:min(720px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      animation: floatIn .6s ease-out both;
+    }
+    @keyframes floatIn { from{ transform: translateY(10px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
+
+    .header{
+      padding: 26px 28px 10px;
+    }
+    .headline{
+      margin:0 0 6px; font-size: clamp(20px, 3.5vw, 28px); font-weight: 800; letter-spacing:.3px;
+    }
+    .sub{
+      margin:0; color:var(--muted); font-size: 14px;
+    }
+
+    form{ padding: 8px 28px 28px; }
+
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .grid-1{ grid-column: 1 / -1; }
+
+    .field{
+      display:flex; flex-direction:column; gap:8px;
+    }
+
+    label{
+      font-size: 13px; color: var(--muted); letter-spacing:.2px;
+    }
+
+    input, textarea{
+      width:100%;
+      padding:14px 14px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,23,42,.5);
+      color:var(--text);
+      outline:none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    input::placeholder, textarea::placeholder{ color: #7c8aa2; }
+
+    input:focus, textarea:focus{
+      border-color: color-mix(in sRGB, var(--accent) 60%, white 0%);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.15);
+      background: rgba(15,23,42,.7);
+    }
+
+    .hint{ font-size:12px; color:#9fb1c8; }
+
+    .actions{ display:flex; gap:12px; align-items:center; justify-content:flex-end; margin-top: 6px; }
+
+    .btn{
+      border:0; cursor:pointer; padding:12px 18px; border-radius: 12px;
+      font-weight: 700; letter-spacing:.3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:#052e1b; box-shadow: 0 6px 20px rgba(34,197,94,.35);
+      transition: transform .06s ease, box-shadow .2s ease;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 26px rgba(34,197,94,.45); }
+    .btn:active{ transform: translateY(0); box-shadow: 0 6px 20px rgba(34,197,94,.35); }
+
+    .btn-outline{
+      background: transparent; color: var(--text);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:none; font-weight:600;
+    }
+    .btn-outline:hover{ border-color: rgba(255,255,255,.3); }
+
+    @media (max-width: 700px){ .grid{ grid-template-columns: 1fr; } }
+
+    input:required:user-invalid, textarea:required:user-invalid{
+      border-color: var(--danger); box-shadow: 0 0 0 4px rgba(239,68,68,.15);
+    }
+
+    footer{
+      padding: 14px 28px 24px; color: var(--muted); font-size: 12px;
+    }
+  </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Dummy Form</h2>
-    <form action="#" method="post">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-      </div>
+  <main class="card" role="region" aria-labelledby="formTitle">
+    <div class="header">
+      <h1 class="headline" id="formTitle">Submission Form</h1>
+      <p class="sub">Please fill in the details below. All <strong>required</strong> fields must be completed.</p>
+    </div>
 
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-      </div>
+    <form action="#" method="post" novalidate>
+      <div class="grid">
+        <!-- Name -->
+        <div class="field">
+          <label for="name">Full Name *</label>
+          <input id="name" name="name" type="text" placeholder="e.g., John Doe" autocomplete="name" required
+                 pattern="^[A-Za-zÀ-ž\s'.-]{2,}$" 
+                 title="Only letters, spaces, and .' - characters allowed" />
+        </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Create a password" required>
-      </div>
+        <!-- Email -->
+        <div class="field">
+          <label for="email">Email Address *</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
 
-      <div class="form-group">
-        <label>Gender</label>
-        <div class="radio-group">
-          <label><input type="radio" name="gender" value="male"> Male</label>
-          <label><input type="radio" name="gender" value="female"> Female</label>
-          <label><input type="radio" name="gender" value="other"> Other</label>
+        <!-- House No. -->
+        <div class="field">
+          <label for="house">House/Flat Number *</label>
+          <input id="house" name="house" type="text" placeholder="e.g., 221B" required
+                 pattern="^[A-Za-z0-9\-\/\s]{1,12}$" title="1–12 characters, numbers, - / and spaces allowed" />
+          <span class="hint">Examples: 12, A-304, 221B</span>
+        </div>
+
+        <!-- Age -->
+        <div class="field">
+          <label for="age">Age *</label>
+          <input id="age" name="age" type="number" placeholder="18" inputmode="numeric" min="1" max="120" required />
+        </div>
+
+        <!-- Message -->
+        <div class="field grid-1">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Write your message here..."></textarea>
         </div>
       </div>
 
-      <div class="form-group">
-        <button type="submit">Submit</button>
+      <div class="actions">
+        <button type="reset" class="btn btn-outline" aria-label="Reset form">Reset</button>
+        <button type="submit" class="btn" aria-label="Submit form">
+          Submit
+        </button>
       </div>
     </form>
-  </div>
+
+    <footer>
+      Note: Submit button is demo only (action="#"). To connect with a real server/Google Form, update action and method.
+    </footer>
+  </main>
 </body>
 </html>
